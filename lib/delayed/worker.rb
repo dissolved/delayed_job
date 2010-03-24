@@ -121,7 +121,7 @@ module Delayed
     def reschedule(job, time = nil)
       if (job.attempts += 1) < self.class.max_attempts
         time ||= Job.db_time_now + (job.attempts ** 4) + 5
-        job.run_at = time
+        job.update_attribute(:run_at, time)
         job.unlock
         job.save!
       else
